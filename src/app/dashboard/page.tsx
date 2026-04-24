@@ -10,12 +10,13 @@ export default async function DashboardPage() {
     redirect("/login")
   }
 
-  const { logs, stats } = await getDashboardData()
+  const { logs, stats, activityData } = await getDashboardData()
 
   return (
     <DashboardClient 
       initialLogs={logs} 
       initialStats={stats} 
+      initialActivityData={activityData}
       user={session.user}
     />
   )

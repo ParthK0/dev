@@ -59,6 +59,17 @@ export async function getDashboardData() {
     return d >= weekAgo
   })
 
+  // Calculate activity for the last 7 days
+  const activityData: { date: string; hours: number }[] = []
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date()
+    d.setDate(d.getDate() - i)
+    const dateStr = d.toISOString().split("T")[0]
+    const dayLogs = logs.filter(l => l.date === dateStr)
+    const totalDayHours = dayLogs.reduce((sum, l) => sum + l.hours, 0)
+    activityData.push({ date: dateStr, hours: totalDayHours })
+  }
+
   return {
     logs: logs.slice(0, 10), // Return top 10 recent
     stats: {
@@ -66,7 +77,8 @@ export async function getDashboardData() {
       streak,
       topLanguage,
       thisWeek: thisWeekLogs.length
-    }
+    },
+    activityData
   }
 }
 
